@@ -57,8 +57,8 @@
 
   function card(p) {
     var media = p.foto === false
-      ? el("div", { "class": "ph", "aria-hidden": "true" }, [el("img", { src: "img/logo-vino.png", alt: "" })])
-      : el("img", { src: "img/p/" + p.id + ".jpg?v=2", alt: p.nombre, loading: "lazy", width: "600", height: "600" });
+      ? el("div", { "class": "ph", "aria-hidden": "true" }, [el("img", { src: "img/logo-vino.svg", alt: "" })])
+      : el("img", { src: "img/p/" + p.id + ".jpg?v=3", alt: p.nombre, loading: "lazy", width: "600", height: "600" });
     var sel = null;
     if (p.opciones) {
       sel = el("select", { "aria-label": "Chocolate para " + p.nombre });
