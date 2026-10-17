@@ -140,6 +140,9 @@ select, input, textarea { font: 300 16px var(--sans); color: var(--ink); backgro
 select:focus, input:focus, textarea:focus { outline: none; border-color: var(--wine); box-shadow: 0 0 0 3px rgba(122,31,51,.14); }
 .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
 .price { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--cocoa); font-variant-numeric: lining-nums; }
+.price-ask { font: 400 15px var(--sans); color: var(--ink-soft); font-style: italic; }
+.btn-ghost-wine { border-color: var(--wine); color: var(--wine); background: transparent; }
+.btn-ghost-wine:hover { background: var(--wine); color: #fff; }
 .sumar { font-size: 13px; color: var(--ink-soft); text-align: right; text-decoration: underline; text-underline-offset: 3px; }
 .sumar:hover { color: var(--wine); }
 .card-feature { border-color: var(--wine); box-shadow: 0 0 0 1px var(--wine); }

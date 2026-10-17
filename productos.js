@@ -10,7 +10,8 @@ window.AMARANTO = {
     { id: "barras", nombre: "Barras y corazones" },
     { id: "figuras", nombre: "Figuras y zapatos" },
     { id: "clasicos", nombre: "Mendigos y naranjitas" },
-    { id: "reposteria", nombre: "Repostería" }
+    { id: "reposteria", nombre: "Repostería" },
+    { id: "temporada", nombre: "Temporada" }
   ],
   productos: [
     // Bombones
@@ -113,6 +114,50 @@ window.AMARANTO = {
     { id: "47686", cat: "reposteria", nombre: "Mousse de maracuyá", detalle: "unidad", precio: 2200,
       desc: "También con otras frutas, especias o licor: cuéntanos en los comentarios." },
     { id: "50985", cat: "reposteria", nombre: "Muffin", detalle: "unidad", precio: 1600,
-      desc: "Con chips de chocolate, arándanos o frambuesa.", opciones: ["Chips de chocolate", "Arándano", "Frambuesa"] }
+      desc: "Con chips de chocolate, arándanos o frambuesa.", opciones: ["Chips de chocolate", "Arándano", "Frambuesa"] },
+
+    // Desde Instagram (2023–2025). precio: null = "Consultar precio" (sin precio reciente confirmado).
+    { id: "ig-caja10", cat: "bombones", nombre: "Caja de 10 bombones", precio: 7300,
+      desc: "Diez bombones de chocolate belga con rellenos variados, en caja de regalo." },
+    { id: "ig-marrasquino", cat: "bombones", nombre: "Bombones de marrasquino y nuez", precio: null,
+      desc: "Chocolate belga blanco relleno con marrasquino y nueces." },
+    { id: "ig-labios", cat: "bombones", nombre: "Labios de chocolate", precio: null,
+      desc: "Labios de chocolate belga blanco con marrasquino." },
+    { id: "ig-trufaframb", cat: "bombones", nombre: "Trufas de frambuesa", precio: null,
+      desc: "Trufas de frambuesa en chocolate belga rubí." },
+    { id: "ig-trufanuez", cat: "bombones", nombre: "Trufa clásica con nueces", precio: null,
+      desc: "Trufa con nueces en chocolate belga de leche." },
+    { id: "ig-corazon4", cat: "barras", nombre: "Corazón de cuatro chocolates", precio: null,
+      desc: "Chocolate belga de leche, bitter, rubí y blanco en un mismo corazón." },
+    { id: "ig-barraruby", cat: "barras", nombre: "Barra de chocolate rubí", precio: null,
+      desc: "Chocolate belga rubí con almendras y cranberries." },
+    { id: "ig-energeticas", cat: "barras", nombre: "Barritas de quinoa y amaranto", detalle: "caja de 4", precio: null,
+      desc: "Chocolate belga 60 % cacao con quinoa y amaranto inflados (endulzados con stevia). Proteína natural." },
+    { id: "ig-jengibre", cat: "clasicos", nombre: "Jengibre confitado bañado", precio: null,
+      desc: "Jengibre confitado bañado en chocolate belga 60 % cacao." },
+    { id: "ig-galletas4", cat: "reposteria", nombre: "Galletas", detalle: "4 unidades", precio: 6000,
+      desc: "Galletas de la casa rellenas, en caja de regalo." },
+    { id: "ig-galletasbomb", cat: "reposteria", nombre: "Caja de galletas y bombones", detalle: "110 g + 3 bombones", precio: 5550,
+      desc: "Galletas bañadas en chocolate con nuez, más tres bombones." },
+    { id: "ig-madeleines", cat: "reposteria", nombre: "Madeleines", precio: null,
+      desc: "Suaves y esponjosas, de chocolate, pistacho, naranja o vainilla. Sin conservantes." },
+    { id: "ig-dulceschilenos", cat: "reposteria", nombre: "Dulces chilenos", precio: null,
+      desc: "Con manjar casero, todo el año, no solo para el 18." },
+    { id: "ig-principes", cat: "reposteria", nombre: "Príncipes", precio: null,
+      desc: "Hojarasca rellena con manjar casero, puré de castaña o huevo mol, con merengue suizo." },
+    { id: "ig-empolvados", cat: "reposteria", nombre: "Empolvados", precio: null,
+      desc: "Esponjosos y suaves, rellenos con manjar casero." },
+    { id: "ig-muffinsbanados", cat: "reposteria", nombre: "Muffin bañado con nuez", precio: null,
+      desc: "Muffin con baño de chocolate y nueces." },
+    { id: "ig-cheesecake", cat: "reposteria", nombre: "Cheesecake de maracuyá", detalle: "trozo", precio: 2950,
+      desc: "Con base de chocolate y los mejores insumos." },
+    { id: "ig-torta4leches", cat: "reposteria", nombre: "Torta cuatro leches", precio: null,
+      desc: "También cinco leches, con Baileys, a pedido." },
+    { id: "ig-arabes", cat: "reposteria", nombre: "Dulces árabes", precio: null, tags: ["vegano"],
+      desc: "Dulces árabes veganos." },
+    { id: "ig-huevoschoc", cat: "temporada", nombre: "Huevos de Pascua de chocolate", precio: null,
+      desc: "De distintos tamaños y rellenos. Solo en Semana Santa: encárgalos con tiempo." },
+    { id: "ig-huevosgalleta", cat: "temporada", nombre: "Huevos de galleta con manjar", precio: null,
+      desc: "Galleta tipo alfajor rellena de manjar, en forma de huevo. Solo en Semana Santa." }
   ]
 };

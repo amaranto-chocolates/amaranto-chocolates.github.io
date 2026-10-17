@@ -58,14 +58,19 @@
   function card(p) {
     var media = p.foto === false
       ? el("div", { "class": "ph", "aria-hidden": "true" }, [el("img", { src: "img/logo-vino.svg", alt: "" })])
-      : el("img", { src: "img/p/" + p.id + ".jpg?v=5", alt: p.nombre, loading: "lazy", width: "600", height: "600" });
+      : el("img", { src: "img/p/" + p.id + ".jpg?v=6", alt: p.nombre, loading: "lazy", width: "600", height: "600" });
     var sel = null;
     if (p.opciones) {
       sel = el("select", { "aria-label": "Chocolate para " + p.nombre });
       p.opciones.forEach(function (o) { sel.appendChild(el("option", { value: o, text: o })); });
     }
-    var add = el("button", { type: "button", "class": "btn btn-wine btn-sm", text: "Agregar" });
-    add.addEventListener("click", function () { addToCart(p.id, sel ? sel.value : ""); });
+    var consultar = p.precio == null;            // sin precio reciente: se consulta, no entra al carro
+    var add = consultar
+      ? el("a", { "class": "btn btn-ghost-wine btn-sm", target: "_blank", rel: "noopener", text: "Consultar",
+          href: "https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent("Hola, Amaranto. Quería consultar por: " + p.nombre + (p.detalle ? " (" + p.detalle + ")" : "") + ".") })
+      : el("button", { type: "button", "class": "btn btn-wine btn-sm", text: "Agregar" });
+    if (!consultar) add.addEventListener("click", function () { addToCart(p.id, sel ? sel.value : ""); });
+    var enSumar = p.id.indexOf("ig-") !== 0;
     var badges = (p.tags || []).map(function (t) { return el("span", { "class": "badge badge-" + t, text: TAGS[t] }); });
     return el("article", { "class": "card" + (p.destacado ? " card-feature" : "") }, [
       el("div", { "class": "card-media" }, [media, badges.length ? el("div", { "class": "badges" }, badges) : null]),
@@ -74,8 +79,8 @@
         p.detalle ? el("p", { "class": "detalle", text: p.detalle }) : null,
         el("p", { "class": "desc", text: p.desc }),
         sel ? el("label", { "class": "opt-row" }, [el("span", { text: "Chocolate" }), sel]) : null,
-        el("div", { "class": "card-foot" }, [el("span", { "class": "price", text: fmt(p.precio) }), add]),
-        el("a", { "class": "sumar", href: D.sumar + p.id, target: "_blank", rel: "noopener", text: "Pagar con tarjeta en Sumar" })
+        el("div", { "class": "card-foot" }, [el("span", { "class": "price" + (consultar ? " price-ask" : ""), text: consultar ? "Consultar precio" : fmt(p.precio) }), add]),
+        enSumar ? el("a", { "class": "sumar", href: D.sumar + p.id, target: "_blank", rel: "noopener", text: "Pagar con tarjeta en Sumar" }) : null
       ])
     ]);
   }
