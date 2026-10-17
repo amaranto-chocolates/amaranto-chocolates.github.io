@@ -1,8 +1,13 @@
 /* Amaranto Chocolates — tienda con pedido por WhatsApp. Sin dependencias. */
 (function () {
   "use strict";
+  // Un solo catálogo para la web y para el servidor de pagos (que recalcula los precios).
+  fetch("productos.json?v=7", { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(init)
+    .catch(function () { var g = document.querySelector("[data-grid]"); if (g) g.textContent = "No se pudo cargar el catálogo. Recarga la página."; });
 
-  var D = window.AMARANTO;
+  function init(D) {
   var STORE_KEY = "amaranto-pedido-v1";
   var TAGS = { sinazucar: "Sin azúcar", vegano: "Vegano", singluten: "Sin gluten" };
 
@@ -70,7 +75,7 @@
           href: "https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent("Hola, Amaranto. Quería consultar por: " + p.nombre + (p.detalle ? " (" + p.detalle + ")" : "") + ".") })
       : el("button", { type: "button", "class": "btn btn-wine btn-sm", text: "Agregar" });
     if (!consultar) add.addEventListener("click", function () { addToCart(p.id, sel ? sel.value : ""); });
-    var enSumar = p.id.indexOf("ig-") !== 0;
+    var enSumar = !D.flow && p.id.indexOf("ig-") !== 0;   // con Flow activo, el pago va en el carro
     var badges = (p.tags || []).map(function (t) { return el("span", { "class": "badge badge-" + t, text: TAGS[t] }); });
     return el("article", { "class": "card" + (p.destacado ? " card-feature" : "") }, [
       el("div", { "class": "card-media" }, [media, badges.length ? el("div", { "class": "badges" }, badges) : null]),
@@ -136,19 +141,50 @@
     if (lastFocus) lastFocus.focus();
   }
 
-  form.addEventListener("submit", function (ev) {
-    ev.preventDefault();
-    var nombre = form.nombre.value.trim(), err = $("[data-form-error]");
-    err.hidden = !!nombre; err.textContent = nombre ? "" : "Escribe tu nombre.";
-    if (!nombre) return;
+  function lineasWhatsApp(nombre) {
     var out = ["Hola, Amaranto. Quiero hacer un pedido:", ""];
     cart.forEach(function (l) {
       var p = BY_ID[l.id];
       out.push("• " + l.qty + " × " + p.nombre + (p.detalle ? " (" + p.detalle + ")" : "") + (l.opt ? " — " + l.opt : "") + ": " + fmt(p.precio * l.qty));
     });
     out.push("", "Total: " + fmt(total()), "Nombre: " + nombre, "Entrega: " + form.entrega.value);
+    var tel = form.telefono.value.trim(); if (tel) out.push("Teléfono: " + tel);
     var nota = form.nota.value.trim(); if (nota) out.push("Comentarios: " + nota);
-    window.open("https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent(out.join("\n")), "_blank", "noopener");
+    return out.join("\n");
+  }
+  function fallo(msg) { var err = $("[data-form-error]"); err.hidden = !msg; err.textContent = msg || ""; }
+
+  var payBtn = $("[data-pay-flow]");
+  if (!D.flow) payBtn.hidden = true;
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var modo = ev.submitter && ev.submitter.getAttribute("data-modo") || "whatsapp";
+    var nombre = form.nombre.value.trim(), email = form.email.value.trim();
+    if (!nombre) return fallo("Escribe tu nombre.");
+    if (modo === "whatsapp") {
+      fallo("");
+      window.open("https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent(lineasWhatsApp(nombre)), "_blank", "noopener");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fallo("Para pagar con tarjeta necesitamos tu correo (ahí te llega el comprobante).");
+    fallo(""); payBtn.disabled = true; payBtn.textContent = "Conectando con Flow…";
+    fetch(D.flow + "/api/crear-pago", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: cart.map(function (l) { return { id: l.id, opt: l.opt, qty: l.qty }; }),
+        nombre: nombre, email: email, telefono: form.telefono.value.trim(),
+        entrega: form.entrega.value, nota: form.nota.value.trim()
+      })
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (x) {
+        if (!x.ok || !x.j.url) throw new Error(x.j.error || "No se pudo iniciar el pago.");
+        location.href = x.j.url;                       // a la pasarela de Flow
+      })
+      .catch(function (e) {
+        fallo((e && e.message) || "No se pudo iniciar el pago. Puedes enviar el pedido por WhatsApp.");
+        payBtn.disabled = false; payBtn.textContent = "Pagar con tarjeta";
+      });
   });
   $("[data-clear]").addEventListener("click", function () { cart = []; save(); renderCart(); });
   document.querySelectorAll("[data-open-cart]").forEach(function (b) { b.addEventListener("click", openCart); });
@@ -167,4 +203,5 @@
   renderTabs();
   renderGrid();
   renderCart();
+  }
 })();

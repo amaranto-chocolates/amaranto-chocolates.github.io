@@ -241,3 +241,7 @@ select:focus, input:focus, textarea:focus { outline: none; border-color: var(--w
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- pago ---------- */
+.pay-note { margin: -4px 0 0; font-size: 13px; color: var(--ink-soft); text-align: center; }
+[data-pay-flow][disabled] { opacity: .7; cursor: progress; }

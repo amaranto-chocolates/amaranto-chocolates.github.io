@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Tu pedido · Amaranto Chocolates</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=7">
+  <style>
+    .result { max-width: 620px; margin: 0 auto; padding: 64px 20px 80px; text-align: center; }
+    .result h1 { font-size: clamp(34px, 5vw, 48px); margin: 18px 0 10px; }
+    .result .icon { width: 72px; height: 72px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 34px; color: #fff; background: var(--wine); }
+    .result.pendiente .icon, .result.error .icon { background: var(--gold); }
+    .result.rechazado .icon { background: var(--ink-soft); }
+    .resumen { text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin: 26px 0; }
+    .resumen dt { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+    .resumen dd { margin: 2px 0 12px; }
+    .resumen ul { margin: 4px 0 0; padding-left: 18px; }
+    .acciones { display: grid; gap: 10px; max-width: 360px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Volver a la tienda"><img src="img/logo-vino.svg" alt="Amaranto Chocolates" width="150" height="70"></a>
+  </header>
+  <main class="result" data-result>
+    <span class="icon" data-icon aria-hidden="true">✓</span>
+    <h1 data-title>¡Gracias por tu compra!</h1>
+    <p class="lede" data-msg></p>
+    <dl class="resumen" data-resumen hidden></dl>
+    <div class="acciones">
+      <a class="btn btn-wine" data-wa target="_blank" rel="noopener">Avisar por WhatsApp</a>
+      <a class="btn btn-ghost-wine" href="./#tienda">Volver a la tienda</a>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var estado = q.get("estado") || "error", orden = q.get("orden") || "", flow = q.get("flow") || "";
+      var monto = Number(q.get("monto") || 0), detalle = (q.get("detalle") || "").split("; ").filter(Boolean);
+      var T = {
+        pagado: ["✓", "¡Gracias por tu compra!", "Recibimos tu pago. Te llegó el comprobante de Flow al correo. Avísanos por WhatsApp para coordinar el retiro o el despacho."],
+        pendiente: ["…", "Tu pago está pendiente", "Flow todavía no confirma el pago (pasa con transferencias). Cuando se confirme te llegará el comprobante al correo."],
+        rechazado: ["×", "El pago no se completó", "No se hizo ningún cobro. Puedes intentarlo de nuevo o enviarnos el pedido por WhatsApp."],
+        error: ["!", "No pudimos verificar el pago", "Si se hizo un cargo, te llegará el comprobante de Flow al correo. Escríbenos y lo revisamos."]
+      }[estado] || null;
+      var t = T || ["!", "No pudimos verificar el pago", ""];
+      var root = document.querySelector("[data-result]"); root.classList.add(estado);
+      document.querySelector("[data-icon]").textContent = t[0];
+      document.querySelector("[data-title]").textContent = t[1];
+      document.querySelector("[data-msg]").textContent = t[2];
+      document.title = t[1] + " · Amaranto Chocolates";
+      if (orden) {
+        var dl = document.querySelector("[data-resumen]"); dl.hidden = false;
+        var add = function (k, v) { var dt = document.createElement("dt"), dd = document.createElement("dd"); dt.textContent = k; if (typeof v === "string") dd.textContent = v; else dd.appendChild(v); dl.appendChild(dt); dl.appendChild(dd); };
+        add("Pedido", orden + (flow ? " · Flow N° " + flow : ""));
+        if (detalle.length) { var ul = document.createElement("ul"); detalle.forEach(function (d) { var li = document.createElement("li"); li.textContent = d; ul.appendChild(li); }); add("Detalle", ul); }
+        if (monto) add("Total", "$ " + monto.toLocaleString("es-CL"));
+        if (q.get("entrega")) add("Entrega", q.get("entrega"));
+      }
+      var msg = estado === "pagado"
+        ? "Hola, Amaranto. Acabo de pagar con Flow el pedido " + orden + (flow ? " (Flow N° " + flow + ")" : "") + (q.get("cliente") ? " a nombre de " + q.get("cliente") : "") + ". " + (q.get("entrega") || "")
+        : "Hola, Amaranto. Tuve un problema al pagar el pedido " + orden + ".";
+      document.querySelector("[data-wa]").href = "https://wa.me/56983405967?text=" + encodeURIComponent(msg);
+      if (estado === "pagado") { try { localStorage.removeItem("amaranto-pedido-v1"); } catch (e) {} }
+    })();
+  </script>
+</body>
+</html>

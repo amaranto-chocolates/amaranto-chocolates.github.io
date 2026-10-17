@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -154,6 +154,12 @@
         <label>Tu nombre
           <input name="nombre" autocomplete="name" required maxlength="60">
         </label>
+        <label>Correo <span class="opt">(para pagar con tarjeta)</span>
+          <input name="email" type="email" autocomplete="email" maxlength="120">
+        </label>
+        <label>Teléfono <span class="opt">(opcional)</span>
+          <input name="telefono" type="tel" autocomplete="tel" maxlength="30">
+        </label>
         <fieldset class="entrega">
           <legend>Entrega</legend>
           <label class="radio"><input type="radio" name="entrega" value="Retiro en la tienda" checked> Retiro en la tienda</label>
@@ -164,7 +170,9 @@
         </label>
         <div class="total-row"><span>Total</span><strong data-total>$ 0</strong></div>
         <p class="form-error" data-form-error role="alert" hidden></p>
-        <button class="btn btn-wine btn-block" type="submit">Enviar pedido por WhatsApp</button>
+        <button class="btn btn-wine btn-block" type="submit" data-modo="flow" data-pay-flow>Pagar con tarjeta</button>
+        <button class="btn btn-ghost-wine btn-block" type="submit" data-modo="whatsapp">Enviar pedido por WhatsApp</button>
+        <p class="pay-note">Pago seguro con Flow: tarjetas de débito y crédito, y transferencia.</p>
         <button class="link-btn" type="button" data-clear>Vaciar pedido</button>
       </form>
     </div>
@@ -172,7 +180,6 @@
 
   <div class="toast" data-toast role="status" aria-live="polite"></div>
 
-  <script src="productos.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
