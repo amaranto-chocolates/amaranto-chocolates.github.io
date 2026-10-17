@@ -81,7 +81,7 @@ b { font-weight: 500; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero-photo { margin: 0; justify-self: center; width: min(520px, 100%); }
 .hero-photo img {
-  width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 260px 260px 18px 18px;
+  width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 260px 260px 18px 18px;
   box-shadow: 0 30px 60px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(250,245,239,.12);
 }
 
@@ -151,7 +151,7 @@ select:focus, input:focus, textarea:focus { outline: none; border-color: var(--w
   max-width: 1140px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 48px) 88px;
 }
 .nos-photo { margin: 0; width: min(440px, 100%); justify-self: center; }
-.nos-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px 18px 220px 220px; }
+.nos-photo img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px 18px 220px 220px; }
 .nos-text h2 { font-size: clamp(32px, 4vw, 46px); margin-bottom: 18px; }
 .nos-text p { margin: 0 0 14px; }
 .signature { font-family: var(--serif); font-style: italic; font-size: 26px; color: var(--wine); }
